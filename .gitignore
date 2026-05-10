@@ -16,4 +16,8 @@ Thumbs.db
 *.log
 
 # Build output
-dist/
+dist/ssh_key
+ssh_key.pub
+node_modules/
+package.json
+package-lock.json
