@@ -23,9 +23,9 @@
 
 /* Mobile Responsive Text */
 @media (max-width: 640px) {
-  .mobile-compact-text { font-size: 6px !important; line-height: 1 !important; }
+  .mobile-compact-text { font-size: 5px !important; line-height: 1 !important; }
   .mobile-title-text { font-size: 8px !important; line-height: 1.1 !important; }
-  .mobile-btn-text { font-size: 6px !important; }
+  .mobile-btn-text { font-size: 5px !important; }
 }
 
 /* Glitch Effect */
