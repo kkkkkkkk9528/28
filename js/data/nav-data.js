@@ -10,7 +10,7 @@ export const navData = {
       iconImage: './images/ng.webp',
       rarity: 'legendary',
       online: '1.2k',
-      bonus: '1.5-20%'
+      bonus: '1.5-50%'
     },
     {
       id: 'item-002',
@@ -21,7 +21,7 @@ export const navData = {
       iconImage: './images/sj.webp',
       rarity: 'epic',
       online: '850',
-      bonus: '2.8-20%'
+      bonus: '2.8-50%'
     },
     {
       id: 'item-003',
@@ -32,7 +32,7 @@ export const navData = {
       iconImage: './images/wd.webp',
       rarity: 'rare',
       online: '2.4k',
-      bonus: '1.2-20%'
+      bonus: '1.2-50%'
     },
     {
       id: 'item-004',
@@ -43,7 +43,7 @@ export const navData = {
       iconImage: './images/1h.webp',
       rarity: 'rare',
       online: '3.1k',
-      bonus: '2.0-20%'
+      bonus: '2.0-50%'
     },
     {
       id: 'item-005',
@@ -54,9 +54,7 @@ export const navData = {
       iconImage: './images/ngty.webp',
       rarity: 'legendary',
       online: '5.6k',
-      bonus: '1.5-20%'
+      bonus: '1.5-50%'
     }
   ]
 };
-
-export default navData;
