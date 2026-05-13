@@ -323,7 +323,7 @@ aside {
   --card-w: clamp(240px, 24vw, 280px);
   --card-h: clamp(130px, 13vw, 150px);
   --card-gap: 8px;
-  --card-title-h: 56px;
+  --card-title-h: 50px;
   display: flex;
   gap: var(--card-gap);
   padding: 0 max(20px, calc((100vw - var(--card-w)) / 2));
@@ -358,6 +358,7 @@ aside {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center 35%;
   position: absolute;
   top: 0;
   left: 0;
@@ -377,7 +378,7 @@ aside {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(transparent, rgba(255,255,255,0.95));
+  background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.12) 18%, rgba(255,255,255,0.92) 42%, rgba(255,255,255,0.98) 100%);
   bottom: 0;
   left: 0;
   right: 0;
@@ -408,12 +409,15 @@ aside {
 }
 
 @media (max-width: 640px) {
-  .card-expand-container { padding: 9px 0 10px; }
+  .card-expand-container {
+    margin-bottom: 0.7rem;
+    padding: 18px 0 4px;
+  }
   .card-3d-5 {
     --card-w: 240px;
-    --card-h: 130px;
-    --card-gap: 6px;
-    --card-title-h: 48px;
+    --card-h: 142px;
+    --card-gap: 1px;
+    --card-title-h: 42px;
   }
   .card-expand-title {
     font-size: 13px;
@@ -428,12 +432,15 @@ aside {
 }
 
 @media (max-width: 380px) {
-  .card-expand-container { padding: 7px 0 8px; }
+  .card-expand-container {
+    margin-bottom: 0.5rem;
+    padding: 14px 0 3px;
+  }
   .card-3d-5 {
     --card-w: 170px;
-    --card-h: 95px;
-    --card-gap: 5px;
-    --card-title-h: 40px;
+    --card-h: 104px;
+    --card-gap: 1px;
+    --card-title-h: 34px;
   }
   .card-expand-title {
     font-size: 11px;
