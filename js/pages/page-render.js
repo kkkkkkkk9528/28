@@ -4,6 +4,158 @@ import { getRandomOnline } from '../components/NavigationCard.js';
 import { generateChartBars } from '../utils/chart.js';
 import { searchItems } from '../services/search-service.js';
 
+const DEFAULT_ITEM_URL = 'https://www.ng081.com';
+const MAX_CAROUSEL_ITEMS = 5;
+const DEFAULT_CAROUSEL_LABELS = { online: '在线人数', bonus: '反水优惠' };
+const SEARCH_CAROUSEL_LABELS = { online: '在线', bonus: '反水' };
+const HOME_TAGS = [
+  { text: '游戏资讯', textColor: 'text-primary', borderColor: 'border-primary/40' },
+  { text: '游戏福利', textColor: 'text-secondary', borderColor: 'border-secondary/40' },
+  { text: '游戏社区', textColor: 'text-tertiary', borderColor: 'border-tertiary/40' },
+  { text: '游戏开奖', textColor: 'text-primary-container', borderColor: 'border-primary-container/40' },
+  { text: '游戏预测', textColor: 'text-secondary-container', borderColor: 'border-secondary-container/40' }
+];
+const HOME_BANNERS = [
+  {
+    image: './images/mdl.webp',
+    alt: 'Banner 1',
+    text: '注册就送88-888',
+    textColor: 'text-primary',
+    path: './pages/promotion.html'
+  },
+  {
+    image: './images/PC.webp',
+    alt: 'Banner 2',
+    text: '游戏预测',
+    textColor: 'text-secondary',
+    path: './pages/first-deposit.html'
+  },
+  {
+    image: './images/ng.webp',
+    alt: 'Banner 3',
+    text: '官方下载地址 旺旺下载地址',
+    textColor: 'text-tertiary',
+    path: './pages/download.html'
+  },
+  {
+    image: './images/NGlog.webp',
+    alt: 'Banner 4',
+    text: 'VIP专属接待',
+    textColor: 'text-primary-container',
+    path: './pages/vip.html'
+  },
+  {
+    image: './images/ng.webp',
+    alt: 'Banner 5',
+    text: '公示 避坑必看',
+    textColor: 'text-secondary-container',
+    path: './pages/warning.html'
+  }
+];
+
+const fallbackCarouselImage = `
+  <div class="flex items-center justify-center card-expand-img text-primary/50">
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"/>
+    </svg>
+  </div>
+`;
+
+const downloadItems = [
+  {
+    image: './images/ng.webp',
+    alt: '官方下载',
+    title: '官方下载地址',
+    url: 'https://sjgj04.vip/',
+    textColor: 'text-primary',
+    chipClass: 'bg-primary/20 text-primary',
+    chipText: '点击下载'
+  },
+  {
+    image: './images/sj.webp',
+    alt: '旺旺下载',
+    title: '旺旺安卓下载',
+    url: 'https://www.wwtalk.cha',
+    textColor: 'text-secondary',
+    chipClass: 'bg-secondary/20 text-secondary',
+    chipText: '点击下载'
+  },
+  {
+    image: './images/ng.webp',
+    alt: '旺旺官网',
+    title: '旺旺官网',
+    url: 'https://www.wwtalk.app',
+    textColor: 'text-tertiary',
+    chipClass: 'bg-tertiary/20 text-tertiary',
+    chipText: '点击下载'
+  },
+  {
+    image: './images/sj.webp',
+    alt: '苹果下载',
+    title: '苹果用户下载',
+    note: '应用商店搜索"旺商聊"',
+    url: 'https://apps.apple.com/app/旺商聊',
+    textColor: 'text-primary-container',
+    chipClass: 'bg-primary-container/20 text-primary-container',
+    chipText: 'App Store'
+  }
+];
+
+function renderCarouselCard(item, index, labels) {
+  const imageMarkup = item.iconImage
+    ? `<img src="${item.iconImage}" class="card-expand-img" alt="${item.title}"/>`
+    : fallbackCarouselImage;
+
+  return `
+    <div class="card-expand" data-index="${index}" onclick="window.open('${item.url || DEFAULT_ITEM_URL}', '_blank')">
+      ${imageMarkup}
+      <div class="card-expand-title">
+        <span>${item.title}</span>
+        <div class="card-expand-info">
+          <span><span class="label">${labels.online}</span><span class="value">${getRandomOnline()}</span></span>
+          <span><span class="label">${labels.bonus}</span><span class="value">${item.bonus || '0.5%'}</span></span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderCarousel(items, labels = DEFAULT_CAROUSEL_LABELS) {
+  return `
+    <div class="card-expand-container">
+      <div class="card-3d-5">
+        ${items.slice(0, MAX_CAROUSEL_ITEMS).map((item, index) => renderCarouselCard(item, index, labels)).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderHomeTag({ text, textColor, borderColor }) {
+  return `<span class="glass-tag px-4 py-1.5 text-xs md:text-sm font-code rounded-full ${textColor} border ${borderColor}">${text}</span>`;
+}
+
+function renderHomeBanner({ image, alt, text, textColor, path }) {
+  return `
+    <div class="glass-panel p-2 flex items-center gap-3 cursor-pointer hover:scale-[1.02] transition-transform" onclick="window.location.href='${path}'">
+      <img src="${image}" class="w-12 h-12 rounded-lg object-contain bg-white" alt="${alt}"/>
+      <span class="font-code text-sm ${textColor} font-bold">${text}</span>
+    </div>
+  `;
+}
+
+function renderDownloadCard(item) {
+  const description = item.note || item.url;
+
+  return `
+    <div class="glass-panel p-4 flex flex-col items-center gap-3 cursor-pointer hover:scale-[1.02] transition-transform" onclick="window.open('${item.url}', '_blank')">
+      <img src="${item.image}" class="w-20 h-20 rounded-lg object-contain bg-white" alt="${item.alt}"/>
+      <span class="font-code text-sm ${item.textColor} font-bold">${item.title}</span>
+      <span class="font-code text-xs text-outline text-center">${description}</span>
+      <span class="px-3 py-1 text-[10px] font-code rounded-full ${item.chipClass}">${item.chipText}</span>
+    </div>
+  `;
+}
+
 export function renderHomePage() {
   return `
     <!-- Hero Header -->
@@ -11,11 +163,7 @@ export function renderHomePage() {
       <h1 class="font-h1 text-2xl md:text-h1 uppercase leading-none glitch" data-glitch="注册就送88-888">注册就送88-888</h1>
       
       <div class="flex flex-wrap gap-2 mt-2">
-        <span class="glass-tag px-4 py-1.5 text-xs md:text-sm font-code rounded-full text-primary border border-primary/40">游戏资讯</span>
-        <span class="glass-tag px-4 py-1.5 text-xs md:text-sm font-code rounded-full text-secondary border border-secondary/40">游戏福利</span>
-        <span class="glass-tag px-4 py-1.5 text-xs md:text-sm font-code rounded-full text-tertiary border border-tertiary/40">游戏社区</span>
-        <span class="glass-tag px-4 py-1.5 text-xs md:text-sm font-code rounded-full text-primary-container border border-primary-container/40">游戏开奖</span>
-        <span class="glass-tag px-4 py-1.5 text-xs md:text-sm font-code rounded-full text-secondary-container border border-secondary-container/40">游戏预测</span>
+        ${HOME_TAGS.map(renderHomeTag).join('')}
       </div>
       
       <p class="font-code text-[10px] md:text-secondary opacity-80 mt-1 md:mt-2 flex items-center gap-1">
@@ -25,22 +173,7 @@ export function renderHomePage() {
     </div>
     
     <!-- Horizontal Sliding Cards -->
-    <div class="card-expand-container">
-      <div class="card-3d-5">
-        ${navData.items.slice(0, 5).map((item, index) => `
-          <div class="card-expand" data-index="${index}" onclick="window.open('${item.url || 'https://www.ng081.com'}', '_blank')">
-            ${item.iconImage ? `<img src="${item.iconImage}" class="card-expand-img" alt="${item.title}"/>` : `<div class="flex items-center justify-center card-expand-img text-primary/50"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div>`}
-            <div class="card-expand-title">
-              <span>${item.title}</span>
-              <div class="card-expand-info">
-                <span><span class="label">在线人数</span><span class="value">${getRandomOnline()}</span></span>
-                <span><span class="label">反水优惠</span><span class="value">${item.bonus || '0.5%'}</span></span>
-              </div>
-            </div>
-          </div>
-        `).join('')}
-      </div>
-    </div>
+    ${renderCarousel(navData.items)}
     
     <!-- Auth Image -->
     <div class="w-full flex justify-center mt-0 mb-6">
@@ -64,26 +197,7 @@ export function renderHomePage() {
       
       <!-- Banner Cards -->
       <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <div class="glass-panel p-2 flex items-center gap-3 cursor-pointer hover:scale-[1.02] transition-transform" onclick="window.location.href='./pages/promotion.html'">
-          <img src="./images/mdl.webp" class="w-12 h-12 rounded-lg object-contain bg-white" alt="Banner 1"/>
-          <span class="font-code text-sm text-primary font-bold">注册就送88-888</span>
-        </div>
-        <div class="glass-panel p-2 flex items-center gap-3 cursor-pointer hover:scale-[1.02] transition-transform" onclick="window.location.href='./pages/first-deposit.html'">
-          <img src="./images/PC.webp" class="w-12 h-12 rounded-lg object-contain bg-white" alt="Banner 2"/>
-          <span class="font-code text-sm text-secondary font-bold">游戏预测</span>
-        </div>
-        <div class="glass-panel p-2 flex items-center gap-3 cursor-pointer hover:scale-[1.02] transition-transform" onclick="window.location.href='./pages/download.html'">
-          <img src="./images/ng.webp" class="w-12 h-12 rounded-lg object-contain bg-white" alt="Banner 3"/>
-          <span class="font-code text-sm text-tertiary font-bold">官方下载地址 旺旺下载地址</span>
-        </div>
-        <div class="glass-panel p-2 flex items-center gap-3 cursor-pointer hover:scale-[1.02] transition-transform" onclick="window.location.href='./pages/vip.html'">
-          <img src="./images/NGlog.webp" class="w-12 h-12 rounded-lg object-contain bg-white" alt="Banner 4"/>
-          <span class="font-code text-sm text-primary-container font-bold">VIP专属接待</span>
-        </div>
-        <div class="glass-panel p-2 flex items-center gap-3 cursor-pointer hover:scale-[1.02] transition-transform" onclick="window.location.href='./pages/warning.html'">
-          <img src="./images/ng.webp" class="w-12 h-12 rounded-lg object-contain bg-white" alt="Banner 5"/>
-          <span class="font-code text-sm text-secondary-container font-bold">公示 避坑必看</span>
-        </div>
+        ${HOME_BANNERS.map(renderHomeBanner).join('')}
       </div>
     </section>
   `;
@@ -97,33 +211,7 @@ export function renderDownloadPage() {
     </div>
     
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="glass-panel p-4 flex flex-col items-center gap-3 cursor-pointer hover:scale-[1.02] transition-transform" onclick="window.open('https://sjgj04.vip/', '_blank')">
-        <img src="./images/ng.webp" class="w-20 h-20 rounded-lg object-contain bg-white" alt="官方下载"/>
-        <span class="font-code text-sm text-primary font-bold">官方下载地址</span>
-        <span class="font-code text-xs text-outline">https://sjgj04.vip/</span>
-        <span class="px-3 py-1 text-[10px] font-code rounded-full bg-primary/20 text-primary">点击下载</span>
-      </div>
-      
-      <div class="glass-panel p-4 flex flex-col items-center gap-3 cursor-pointer hover:scale-[1.02] transition-transform" onclick="window.open('https://www.wwtalk.cha', '_blank')">
-        <img src="./images/sj.webp" class="w-20 h-20 rounded-lg object-contain bg-white" alt="旺旺下载"/>
-        <span class="font-code text-sm text-secondary font-bold">旺旺安卓下载</span>
-        <span class="font-code text-xs text-outline">https://www.wwtalk.cha</span>
-        <span class="px-3 py-1 text-[10px] font-code rounded-full bg-secondary/20 text-secondary">点击下载</span>
-      </div>
-      
-      <div class="glass-panel p-4 flex flex-col items-center gap-3 cursor-pointer hover:scale-[1.02] transition-transform" onclick="window.open('https://www.wwtalk.app', '_blank')">
-        <img src="./images/ng.webp" class="w-20 h-20 rounded-lg object-contain bg-white" alt="旺旺官网"/>
-        <span class="font-code text-sm text-tertiary font-bold">旺旺官网</span>
-        <span class="font-code text-xs text-outline">https://www.wwtalk.app</span>
-        <span class="px-3 py-1 text-[10px] font-code rounded-full bg-tertiary/20 text-tertiary">点击下载</span>
-      </div>
-      
-      <div class="glass-panel p-4 flex flex-col items-center gap-3" onclick="window.open('https://apps.apple.com/app/旺商聊', '_blank')">
-        <img src="./images/sj.webp" class="w-20 h-20 rounded-lg object-contain bg-white" alt="苹果下载"/>
-        <span class="font-code text-sm text-primary-container font-bold">苹果用户下载</span>
-        <span class="font-code text-xs text-outline text-center px-2">应用商店搜索"旺商聊"</span>
-        <span class="px-3 py-1 text-[10px] font-code rounded-full bg-primary-container/20 text-primary-container">App Store</span>
-      </div>
+      ${downloadItems.map(renderDownloadCard).join('')}
     </div>
     
     <div class="mt-6 glass-panel p-4">
@@ -165,22 +253,7 @@ export function renderSearchPage(query) {
         <p class="font-code text-outline">未找到相关内容，请尝试其他关键词</p>
       </div>
     ` : `
-      <div class="card-expand-container">
-        <div class="card-3d-5">
-          ${results.slice(0, 5).map((item, index) => `
-            <div class="card-expand" data-index="${index}" onclick="window.open('${item.url || 'https://www.ng081.com'}', '_blank')">
-              ${item.iconImage ? `<img src="${item.iconImage}" class="card-expand-img" alt="${item.title}"/>` : `<div class="flex items-center justify-center card-expand-img text-primary/50"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div>`}
-              <div class="card-expand-title">
-                <span>${item.title}</span>
-                <div class="card-expand-info">
-                  <span><span class="label">在线</span><span class="value">${getRandomOnline()}</span></span>
-                  <span><span class="label">反水</span><span class="value">${item.bonus || '0.5%'}</span></span>
-                </div>
-              </div>
-            </div>
-          `).join('')}
-        </div>
-      </div>
+      ${renderCarousel(results, SEARCH_CAROUSEL_LABELS)}
     `}
   `;
 }

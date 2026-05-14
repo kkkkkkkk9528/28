@@ -1,22 +1,19 @@
 // 主应用入口
 import { startCountdownTimer } from './utils/countdown.js';
-import { renderHomePage, renderDownloadPage, renderSearchPage } from './pages/page-render.js';
+import {
+  renderHomePage as renderHomePageContent,
+  renderDownloadPage as renderDownloadPageContent,
+  renderSearchPage as renderSearchPageContent
+} from './pages/page-render.js';
 import { initCarousel } from './components/CardCarousel.js';
 
 // 应用主对象
 const app = {
-  currentRoute: 'home',
+  initialized: false,
   
   init() {
-    // 绑定搜索
-    const searchInput = document.getElementById('global-search');
-    if (searchInput) {
-      searchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-          this.search(searchInput.value);
-        }
-      });
-    }
+    if (this.initialized) return;
+    this.initialized = true;
     
     // 初始渲染
     this.render();
@@ -31,12 +28,14 @@ const app = {
     
     if (hash.startsWith('/search')) {
       const query = new URLSearchParams(hash.split('?')[1] || '').get('q') || '';
-      return this.renderSearch(query);
-    } else if (hash === '/download') {
-      return this.renderDownloadPage();
-    } else {
-      return this.renderHome();
+      return renderSearchPageContent(query);
     }
+
+    if (hash === '/download') {
+      return renderDownloadPageContent();
+    }
+
+    return renderHomePageContent();
   },
   
   render() {
@@ -44,18 +43,6 @@ const app = {
     if (main) {
       main.innerHTML = this.handleRoute();
     }
-  },
-  
-  renderHome() {
-    return renderHomePage();
-  },
-  
-  renderSearch(query) {
-    return renderSearchPage(query);
-  },
-  
-  renderDownloadPage() {
-    return renderDownloadPage();
   },
   
   search(query) {
